@@ -1,17 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { Suspense, lazy } from 'react';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const Home = lazy(() => import('./pages/Home'));
+const API = lazy(() => import('./pages/API'));
+const Layout = lazy(() => import('./pages/Layout'));
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
+export default function App() {
+  return (
+    <Router>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" elemental={<Layout />}>
+            <Route index element={<Home />}/>
+            <Route path="api" element={<API />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </Router>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(<App />)
